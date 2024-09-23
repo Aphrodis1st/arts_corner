@@ -1,10 +1,21 @@
+import { useEffect } from "react";
+import { fetchCategories } from "../../../redux/features/categorySlice";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../redux/hooks/manageState";
 
 const Dashboard = () => {
-  return (
-    <div>
-      Dashboard
-    </div>
-  )
-}
+  const dispatch = useAppDispatch();
+  const { categories, status } = useAppSelector((state) => state.category);
 
-export default Dashboard
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchCategories());
+    }
+  }, [status, dispatch]);
+  console.log(categories);
+  return <div>Dashboard</div>;
+};
+
+export default Dashboard;
