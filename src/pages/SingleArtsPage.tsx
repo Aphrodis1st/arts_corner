@@ -32,7 +32,7 @@ const SingleArtsPage = () => {
   }
 
   return (
-    <div className="bg-black text-white px-[5%] mx-auto py-10">
+    <div className="bg-black text-white px-[5%] mx-auto py-10 min-h-screen mt-14">
       <div className="flex flex-col px-[20%] mx-auto">
         <h1 className="text-4xl font-black">{singleProduct.title}</h1>
         <p className="text-2xl">{singleProduct.description}</p>

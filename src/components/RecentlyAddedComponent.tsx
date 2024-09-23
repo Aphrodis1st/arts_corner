@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks/manageState";
 import { getAllProducts } from "../redux/features/productSlice";
 import RecentlyAddedCard from "./common/RecentlyAddedCard";
+import { Link } from "react-router-dom";
 
 const RecentlyAdded = () => {
   const dispatch = useAppDispatch();
@@ -20,17 +21,16 @@ const RecentlyAdded = () => {
         <div className="grid grid-cols-4 gap-4">
           {status === "loading" && <p>Loading...</p>}
           {status === "succeeded" &&
-            products
-              .slice(0, 4)
-              .map((recent, idx) => (
+            products.slice(0, 4).map((recent, idx) => (
+              <Link key={idx} to={"/gallery"}>
                 <RecentlyAddedCard
                   title={recent.title}
                   description={recent.description}
                   owner={recent.name}
                   image={recent.images[2]}
-                  key={idx}
                 />
-              ))}
+              </Link>
+            ))}
           {status === "failed" && <p>Error fetching products</p>}
         </div>
       </div>
