@@ -4,7 +4,7 @@ import RecentlyAdded from "../components/RecentlyAddedComponent";
 const HomePage = () => {
   return (
     <div>
-      <div className="flex items-center justify-between px-[5%] py-20 bg-black text-white min-h-screen">
+      <div className="flex items-center justify-between px-[5%] py-20 bg-black text-white min-h-screen mt-14">
         <div className="w-1/2">
           <h1 className="text-4xl font-bold mb-6">Art's Corner</h1>
           <p className="text-lg mb-6">
