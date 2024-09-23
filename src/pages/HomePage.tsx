@@ -8,24 +8,16 @@ const HomePage = () => {
         <div className="w-1/2">
           <h1 className="text-4xl font-bold mb-6">Art's Corner</h1>
           <p className="text-lg mb-6">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores
-            ducimus error eos deserunt dolore, quos cum odio incidunt veniam,
-            ipsam ratione consequatur. Enim temporibus, voluptas magni ipsa
-            dignissimos illum nostrum? Sed consequuntur quaerat deserunt quae
-            exercitationem esse asperiores ea sint odio necessitatibus
-            recusandae facilis enim, ex voluptas quas, quam, sit nemo tempore
-            tempora eveniet dolor facere omnis rerum neque. Obcaecati! Iusto
-            suscipit quo quod numquam consectetur sed commodi odio? Nostrum,
-            nemo animi iste inventore excepturi, quam velit eveniet nulla veniam
-            iure temporibus reprehenderit, similique aliquam. Consectetur
-            cupiditate eaque deserunt sed? Id repellat deleniti excepturi earum
-            obcaecati sequi sunt ex, beatae qui, mollitia hic quasi nostrum
-            neque ab praesentium odit, labore tempore nihil repellendus fugit
-            maiores nesciunt ipsa! Possimus, in totam. Quasi eaque pariatur
-            deserunt neque nulla inventore dolores blanditiis at perferendis
-            quis veniam quia corrupti fugit recusandae, dolorum illo impedit
-            dignissimos error exercitationem quidem natus cupiditate quod ad
-            saepe. Odit.
+            The ultimate platform for artists and art enthusiasts! This app will
+            provide a dynamic space where artists can showcase their work to a
+            global audience. By uploading their creations, artists can create a
+            personalized portfolio that highlights their unique style and
+            talent. Art lovers can browse through diverse galleries, discover
+            inspiring pieces, and connect directly with the creators behind the
+            artwork. Whether you’re an artist seeking to gain recognition or a
+            collector looking to discover new talent, bridges the gap between
+            creativity and appreciation, making it easy to engage and
+            collaborate.
           </p>
           <button className="bg-gray-800 hover:bg-gray-700 px-10 py-3 rounded-full text-white">
             Explore

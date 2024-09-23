@@ -115,7 +115,11 @@ const Work = () => {
                     >
                       {item.title}
                     </td>
-                    <td className="px-2">{item.description}</td>
+                    <td className="px-2">
+                      {item.description.length > 12
+                        ? `${item.description.slice(0, 12)}...`
+                        : item.description}
+                    </td>
                     <td className="px-6 flex items-center space-x-2 h-12 text-xl">
                       <Link to={`/dashboard/work/${item.id}`} state={item}>
                         <button className="text-green-600">
