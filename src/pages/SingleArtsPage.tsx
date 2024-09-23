@@ -1,23 +1,71 @@
-import { single_image } from "../assets/images"
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { fetchSingleProduct } from "../../src/redux/features/singleProductSlice";
+import { single_image } from "../assets/images"; // Fallback image
+import { useAppDispatch, useAppSelector } from "../redux/hooks/manageState";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 
 const SingleArtsPage = () => {
+  const dispatch = useAppDispatch();
+  const { id } = useParams();
+  const { singleProduct, status, error } = useAppSelector(
+    (state) => state.singleProduct,
+  );
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchSingleProduct(id));
+    }
+  }, [id, dispatch]);
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (status === "failed") {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!singleProduct) {
+    return <div>No product found.</div>;
+  }
+
   return (
     <div className="bg-black text-white px-[5%] mx-auto py-10">
       <div className="flex flex-col px-[20%] mx-auto">
-        <h1 className="text-4xl font-black">Title</h1>
-        <p className="text-2xl">Description</p>
-        <div className="w-full">
-            <div className="h-[70vh] w-full">
-                <img src={single_image} alt="" className="w-full h-full object-cover"/>
-            </div>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reiciendis, facilis quasi quis exercitationem corporis quidem inventore, quos aspernatur ipsa odio quas quaerat aliquid voluptatibus, labore saepe expedita nihil porro id!
-            Excepturi nemo blanditiis consequatur autem fugiat ad eum harum voluptas iure illum culpa animi, minus temporibus dolorum? Rem amet, unde dicta, ut voluptatum aliquam accusantium, assumenda nobis corporis officia eos!
-            Asperiores vero illum praesentium saepe expedita rem sint, corporis iusto incidunt voluptates esse dicta accusamus deserunt voluptate possimus doloremque, commodi veritatis consequatur minima? Accusamus, numquam debitis fugiat fugit dolore enim!
-            Deserunt, voluptatem provident. Dolore officia deserunt laudantium aliquid quo possimus! Animi vel tempora dolor necessitatibus tempore illum explicabo nihil? Praesentium officiis enim labore fugiat inventore nobis fugit in sunt ullam.</p>
+        <h1 className="text-4xl font-black">{singleProduct.title}</h1>
+        <p className="text-2xl">{singleProduct.description}</p>
+        <div className="w-full mt-4">
+          <Carousel
+            responsive={{
+              desktop: {
+                breakpoint: { max: 3000, min: 1024 },
+                items: 1,
+                partialVisibilityGutter: 40,
+              },
+              mobile: {
+                breakpoint: { max: 1024, min: 0 },
+                items: 1,
+                partialVisibilityGutter: 30,
+              },
+            }}
+            itemClass="carousel-item-padding-40-px"
+          >
+            {singleProduct.images.map((image, index) => (
+              <div key={index} className="h-[70vh] w-full">
+                <img
+                  src={image || single_image}
+                  alt={`Product image ${index + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))}
+          </Carousel>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SingleArtsPage
+export default SingleArtsPage;

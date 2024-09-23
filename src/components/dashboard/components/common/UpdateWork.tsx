@@ -1,74 +1,116 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
 import { useForm } from "react-hook-form";
-import { createProduct } from "../../../../redux/features/productSlice";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { updateProduct } from "../../../../redux/features/productSlice";
+import { fetchSingleProduct } from "../../../../redux/features/singleProductSlice";
 import {
   useAppDispatch,
   useAppSelector,
 } from "../../../../redux/hooks/manageState";
-import { useEffect } from "react";
 import { fetchCategories } from "../../../../redux/features/categorySlice";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type FormData = {
   title: string;
   name: string;
   description: string;
-  images: FileList;
-  artistId: string;
+  images: FileList | null;
   categoryId: string;
 };
 
-interface AddWorkProps {
-  toggleModal: () => void;
-}
-
-const AddWork = ({ toggleModal }: AddWorkProps) => {
+const UpdateWork = () => {
   const dispatch = useAppDispatch();
-  const { categories, status } = useAppSelector((state) => state.category);
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { singleProduct, status: productStatus } = useAppSelector(
+    (state) => state.singleProduct,
+  );
+  const { categories, status: categoryStatus } = useAppSelector(
+    (state) => state.category,
+  );
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (status === "idle") {
+    if (categoryStatus === "idle") {
       dispatch(fetchCategories());
     }
-  }, [status, dispatch]);
-
-  console.log(categories);
+    if (id) {
+      dispatch(fetchSingleProduct(id));
+    }
+  }, [categoryStatus, id, dispatch]);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormData>();
 
-  const onSubmit = (data: FormData) => {
+  useEffect(() => {
+    if (singleProduct) {
+      reset({
+        title: singleProduct.title,
+        name: singleProduct.name,
+        description: singleProduct.description,
+        categoryId: singleProduct.categoryId,
+        images: null,
+      });
+    }
+  }, [singleProduct, reset]);
+
+  const onSubmit = async (data: FormData) => {
+    setLoading(true);
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("name", data.name);
     formData.append("description", data.description);
     formData.append("categoryId", data.categoryId);
 
-    Array.from(data.images).forEach((image) => {
-      formData.append("images", image);
-    });
+    if (data.images) {
+      Array.from(data.images).forEach((image) => {
+        formData.append("images", image);
+      });
+    }
 
-    dispatch(createProduct(formData));
-    toggleModal();
+    try {
+      if (!singleProduct) {
+        throw new Error("Product not found");
+      }
+
+      await dispatch(
+        updateProduct({ id: singleProduct.id, updatedProduct: formData }),
+      ).unwrap();
+
+      toast.success("Product updated successfully!");
+
+      setTimeout(() => {
+        navigate("/dashboard/work");
+      }, 2000);
+    } catch (error) {
+      toast.error("Failed to update product. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="fixed inset-0 w-full h-full bg-black/20 flex items-center justify-center p-10">
-      <div
-        className="absolute -z-10 backdrop-blur-sm w-full h-full inset-0"
-        onClick={() => toggleModal()}
-      ></div>
+      <div className="absolute -z-10 backdrop-blur-sm w-full h-full inset-0"></div>
       <div className="bg-black text-white flex justify-center items-center w-1/2 shadow-2xl">
         <form
           className="bg-[#1e1e1e] p-6 rounded-lg w-full"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <h2 className="text-xl mb-4">Add New Work</h2>
+          <h2 className="text-xl mb-4">Update Work</h2>
 
           <div className="mb-4">
             <label className="block text-sm mb-2" htmlFor="title">
@@ -137,7 +179,6 @@ const AddWork = ({ toggleModal }: AddWorkProps) => {
                 </option>
               ))}
             </select>
-            a
             {errors.categoryId && (
               <p className="text-red-500 text-sm">
                 {errors.categoryId.message}
@@ -155,9 +196,7 @@ const AddWork = ({ toggleModal }: AddWorkProps) => {
                 type="file"
                 className="w-full p-2 rounded-md bg-gray-200 text-black"
                 multiple
-                {...register("images", {
-                  required: "At least one image is required",
-                })}
+                {...register("images")}
               />
             </div>
             {errors.images && (
@@ -169,12 +208,13 @@ const AddWork = ({ toggleModal }: AddWorkProps) => {
             type="submit"
             className="bg-gray-400 text-black px-4 py-2 rounded-md w-full"
           >
-            Add Work
+            Update Work
           </button>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };
 
-export default AddWork;
+export default UpdateWork;
