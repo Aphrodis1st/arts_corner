@@ -16,7 +16,7 @@ const RecentlyAddedCard = ({
       <div className="relative">
         <div className="h-[40vh] relative">
           <img src={image} alt="image" className="h-full w-full object-cover" />
-          <div className="w-full h-[40vh] top-0 z-10 bg-black/30 absolute"></div>
+          <div className="w-full h-[40vh] top-0 z-10 bg-black/40 absolute"></div>
         </div>
         <div className="absolute z-20 top-0 px-5">
           <h1 className="text-2xl font-black">{title}</h1>
